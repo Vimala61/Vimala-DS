@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Search</title>
+    <script>
+      function searchMovie() {
+        let movieName = document.getElementById("movieName").value;
+        console.log(movieName);
+        fetch(`/api/recommend/${movieName}`)
+          .then((response) => response.json())
+          .then((data) => {
+            let resultTable = document.getElementById("result");
+            resultTable.innerHTML = `<tr>
+                        <th>Movie Name</th>
+                        <th>Genre</th>
+                    </tr>`;
+            if (data.length === 0) {
+              resultTable.innerHTML += `<tr><td colspan="2">No movies found</td></tr>`;
+            } else {
+              data.forEach((movie) => {
+                resultTable.innerHTML += `
+                                <tr>
+                                    <td>${movie.title}</td>
+                                    <td>${movie.genres}</td>
+                                </tr>`;
+              });
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Movie Search</h2>
+    <input type="text" id="movieName" placeholder="Enter movie  name" />
+    <button onclick="searchMovie()">Search</button>
+
+    <h3>Result:</h3>
+    <table border="1" id="result">
+      <tr>
+        <th>Movie Name</th>
+        <th>Genre</th>
+      </tr>
+    </table>
+  </body>
+</html>
